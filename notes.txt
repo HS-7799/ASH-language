@@ -1,0 +1,42 @@
+ply is a package that consists of two modules : lex.py and yacc.py
+
+
+            lexical rules              gramar rules
+                |                          |
+                |                          |
+                |                          |
+  input ----> lex.py ----> tokens ----> yacc.py ----> parsed input
+
+lex.py and yacc.py work together
+
+if the input is : 
+data = '''
+5 + 2
+'''
+then the tokens passed to yacc are : NUMBER, PLUS and NUMBER
+tokens actually are : instances of LexToken class, each instance has type, value, lineno and lexpos
+
+type is NUMBER
+value is the actual text matched the rules
+lineno is the current line number
+lexpos is the position of the token relative to the begining of the line
+
+example : LexToken(NUMBER,5,2,1)
+
+
+!!!!!!!
+
+When building the master regular expression, rules are added in the following order:
+
+1) All tokens defined by functions are added in the same order as they appear in the lexer file.
+2) Tokens defined by strings are added next by sorting them in order of decreasing regular expression length (longer expressions are added first).
+
+!!!!!!!
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Grammar rules : 
+
+
+expression -> expression PLUS term | expression MINES term | term
+term -> term TIMES factor | term DIVIDE factor | term MODULO factor | factor
+factor -> LPAREN expression RPAREN | NUMBER
