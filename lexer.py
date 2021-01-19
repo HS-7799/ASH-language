@@ -32,19 +32,29 @@ tokens = [
 # Reserved words
 
 reserved = {
+    # logical operators
    'ou' : 'AND',
    'aw' : 'OU',
+    # Conditions 
    'ila' : 'IF',
    'awlaila' : 'ELIF',
    'awla' : 'ELSE',
-   'reje3' : 'RETURN',
-   'La' : 'False',
-   'Ah' : 'True',
+    # Loops
    'ma7ed' : 'WHILE',
    'likol' : 'FOR',
+    # Boolean values
+   'La' : 'False',
+   'Ah' : 'True',
+   # Return
+   'reje3' : 'RETURN',
+   # break / continue
    '5roj' : 'BREAK',
    'kmel' : 'CONTINUE',
-   'kteb' : 'PRINT'
+   # output / input
+   'kteb' : 'PRINT',
+   '9ra'  : 'INPUT',
+   # define a function
+   'dala' : 'FUNCTION'
 }
 
 tokens += list(reserved.values())
@@ -116,7 +126,10 @@ lexer = lex.lex()
 
 # Test it out
 data = '''
-ou = 1
+dala sayHello()
+{
+    kteb("salam")
+}
 '''
 
 # Give the lexer some input
