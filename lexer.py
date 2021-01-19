@@ -10,7 +10,6 @@ tokens = [
    'LE',
    'ID',
    'NUMBER',
-   'STRING',
    'PLUS',
    'MINUS',
    'TIMES',
@@ -25,6 +24,7 @@ tokens = [
    'ASSIGN',
    'SEMICOL',
    'COMMA',
+   'STRING',
 ]
 
 
@@ -34,10 +34,10 @@ tokens = [
 reserved = {
     # logical operators
    'ou' : 'AND',
-   'aw' : 'OU',
+   'aw' : 'OR',
     # Conditions 
    'ila' : 'IF',
-   'awlaila' : 'ELIF',
+   'awla ila' : 'ELIF',
    'awla' : 'ELSE',
     # Loops
    'ma7ed' : 'WHILE',
@@ -126,11 +126,9 @@ lexer = lex.lex()
 
 # Test it out
 data = '''
-dala sayHello()
-{
-    kteb("salam")
-}
+ila( Ah ) {kteb(5) } awla ila(Ah) { kteb(10) }
 '''
+# ila(5 == 5) { kteb("salam") } awla { kteb("bye") }
 
 # Give the lexer some input
 lexer.input(data)
