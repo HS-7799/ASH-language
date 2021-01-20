@@ -95,7 +95,7 @@ def t_NUMBER(t):
     return t
 
 def t_STRING(t):
-    r'".*."'
+    r'"[^"]*"'
     t.value = t.value[1:len(t.value) - 1]
     return t
 
@@ -126,9 +126,8 @@ lexer = lex.lex()
 
 # Test it out
 data = '''
-ila( Ah ) {kteb(5) } awla ila(Ah) { kteb(10) }
+a = Ah ou Ah
 '''
-# ila(5 == 5) { kteb("salam") } awla { kteb("bye") }
 
 # Give the lexer some input
 lexer.input(data)

@@ -1,11 +1,10 @@
 import ply.yacc as yacc
 
 # Get token from lexer
-
 from lexer import tokens
 
-
-
+# dictionnary that hold identifiers and their values
+identifiers = {}
 
 def p_instruction(p):
     '''instruction : assignement
@@ -14,12 +13,12 @@ def p_instruction(p):
                    | condition'''
     p[0] = p[1]
 
+# conditions
 def p_condition(p):
     '''condition : conditionIF
                  | conditionIFELIF
                  | conditionIFELSE'''
     p[0] = p[1]
-
 def p_condition_if(p):
     'conditionIF : IF LPAREN expression RPAREN LBRACE instruction RBRACE'
     if p[3]:
@@ -31,7 +30,6 @@ def p_condition_if_elif(p):
         p[0] = p[6]
     else:
         p[0] = p[9]
-
 def p_condition_if_else(p):
     'conditionIFELSE : IF LPAREN expression RPAREN LBRACE instruction RBRACE ELSE LBRACE instruction RBRACE'
     if p[3]:
@@ -43,7 +41,9 @@ def p_condition_if_else(p):
 def p_assignement(p):
     'assignement : ID ASSIGN expString'
     p[0] = p[3]
-
+    value_to_assign = p[3]
+    identifiers[p[1]] = value_to_assign
+    # var = Variable(p[1],value_to_assign)
 def p_output(p):
     'output : PRINT LPAREN expString RPAREN'
     p[0] = p[3]
@@ -96,7 +96,7 @@ def p_term(p):
         if p[3] != 0:
             p[0] = p[1] / p[3]
         else:
-            print('Zero division error')
+            print("Can't divide by 0")
     elif p[2] == '%':
         p[0] = p[1] % p[3]
     
@@ -111,6 +111,7 @@ def p_factor_expression(p):
 
 def p_factor_number_ID(p):
     '''factor : NUMBER
+              | AccessIdentifier
               | True
               | False'''
     if p[1] == 'La':
@@ -120,7 +121,9 @@ def p_factor_number_ID(p):
     else:
         p[0] = p[1]
 
-
+def p_access_iden(p):
+    'AccessIdentifier : ID'
+    p[0] = identifiers[p[1]]
 
 
 # Error rule for syntax errors
