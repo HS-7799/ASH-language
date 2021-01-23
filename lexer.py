@@ -2,6 +2,8 @@ import ply.lex as lex
 
 # List of token names.   This is always required
 tokens = [
+   'FLOAT',
+   'INT',
    'EQ',
    'NEQ',
    'GT',
@@ -9,7 +11,6 @@ tokens = [
    'LT',
    'LE',
    'ID',
-   'NUMBER',
    'PLUS',
    'MINUS',
    'TIMES',
@@ -42,6 +43,7 @@ reserved = {
     # Loops
    'ma7ed' : 'WHILE',
    'likol' : 'FOR',
+   'fi' : 'TO',
     # Boolean values
    'La' : 'False',
    'Ah' : 'True',
@@ -89,10 +91,18 @@ def t_ID(t):
     return t
 
 # A regular expression rule with some action code
-def t_NUMBER(t):
-    r'[+-]?[0-9]+'
+
+
+def t_FLOAT(t):
+    r'\d+\.\d+'
+    t.value = float(t.value)
+    return t
+
+def t_INT(t):
+    r'\d+'
     t.value = int(t.value)
     return t
+
 
 def t_STRING(t):
     r'"[^"]*"'
@@ -126,8 +136,9 @@ lexer = lex.lex()
 
 # Test it out
 data = '''
-a = Ah ou Ah
+5 + 1.2 - 8
 '''
+
 
 # Give the lexer some input
 lexer.input(data)

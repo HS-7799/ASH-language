@@ -6,12 +6,38 @@ from lexer import tokens
 # dictionnary that hold identifiers and their values
 identifiers = {}
 
+
+
 def p_instruction(p):
     '''instruction : assignement
                    | output
+                   | loop
                    | expression
                    | condition'''
     p[0] = p[1]
+
+def p_loop(p):
+    '''loop : FORlOOP
+            | WHILELOOP'''
+    p[0] = p[1]
+
+def p_for_loop(p):
+    'FORlOOP : FOR LPAREN ID ASSIGN expression TO expression RPAREN LBRACE instruction RBRACE'
+    identifiers[p[3]] = int(p[5])
+    debut = identifiers[p[3]]
+    arret = int(p[7])
+    while debut <= arret :
+        p[0] = p[10]
+        debut = debut + 1
+
+    
+    
+
+def p_while_loop(p):
+    'WHILELOOP : WHILE LPAREN comparaison RPAREN LBRACE instruction RBRACE'
+    while p[3]:
+        p[0] = p[6]
+        # print(p[6],p[3])
 
 # conditions
 def p_condition(p):
@@ -38,12 +64,12 @@ def p_condition_if_else(p):
         p[0] = p[10]
 
 
+
 def p_assignement(p):
     'assignement : ID ASSIGN expString'
     p[0] = p[3]
     value_to_assign = p[3]
     identifiers[p[1]] = value_to_assign
-    # var = Variable(p[1],value_to_assign)
 def p_output(p):
     'output : PRINT LPAREN expString RPAREN'
     p[0] = p[3]
@@ -56,18 +82,25 @@ def p_expression_string(p):
 
 def p_expression(p):
     '''expression : expression PLUS term
-                  | expression MINUS term
-                  | expression EQ term
-                  | expression NEQ term
-                  | expression GT term
-                  | expression GE term
-                  | expression LT term
-                  | expression LE term'''
+                  | expression MINUS term'''
     if p[2] == '+':
         p[0] = p[1] + p[3]
-    elif p[2] == '-' :
+    elif p[2] == '-':
         p[0] = p[1] - p[3]
-    elif p[2] == '==':
+
+def p_expression_comparaison(p):
+    'expression : comparaison'
+    p[0] = p[1]
+
+def p_comparaison(p):
+    '''comparaison : expression EQ term
+                   | expression NEQ term
+                   | expression GT term
+                   | expression GE term
+                   | expression LT term
+                   | expression LE term'''
+
+    if p[2] == '==':
         p[0] = p[1] == p[3]
     elif p[2] == '!=':
         p[0] = p[1] != p[3]
@@ -121,6 +154,11 @@ def p_factor_number_ID(p):
     else:
         p[0] = p[1]
 
+def p_number(p):
+    '''NUMBER : INT
+              | FLOAT'''
+    p[0] = p[1]
+
 def p_access_iden(p):
     'AccessIdentifier : ID'
     p[0] = identifiers[p[1]]
@@ -128,7 +166,12 @@ def p_access_iden(p):
 
 # Error rule for syntax errors
 def p_error(p):
-    print("Syntax error in input!")
+    if p == None:
+        token = "end of file"
+    else:
+        token = f"{p.type}({p.value}) on line {p.lineno}"
+
+    print(f"Syntax error: Unexpected {token}")
 
 # Build the parser
 parser = yacc.yacc()
