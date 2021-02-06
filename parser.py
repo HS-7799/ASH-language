@@ -1,18 +1,31 @@
 import ply.yacc as yacc
 import sys
+import pprint
+
 # Get token from lexer
 from lexer import tokens
 
 # dictionnary that hold identifiers and their values
 identifiers = {}
 
+def p_program(p):
+    'program : statements'
+    p[0] = p[1]
+
+def p_statements(p):
+    ''' statements : statements statement
+                   | statement
+    '''
+    if len(p) == 2:
+        p[0] = [p[1]]
+    else:
+        p[0] = p[1] + [p[2]]
 
 
 def p_instruction(p):
-    '''instruction : assignement
+    '''statement   : assignement
                    | output
                    | loop
-                   | expression
                    | condition'''
     p[0] = p[1]
 
@@ -22,7 +35,7 @@ def p_loop(p):
     p[0] = p[1]
 
 def p_for_loop(p):
-    'FORlOOP : FOR LPAREN ID ASSIGN expression TO expression RPAREN LBRACE instruction RBRACE'
+    'FORlOOP : FOR LPAREN ID ASSIGN expression TO expression RPAREN LBRACE statements RBRACE'
     identifiers[p[3]] = int(p[5])
     debut = identifiers[p[3]]
     arret = int(p[7])
@@ -34,7 +47,7 @@ def p_for_loop(p):
     
 
 def p_while_loop(p):
-    'WHILELOOP : WHILE LPAREN comparaison RPAREN LBRACE instruction RBRACE'
+    'WHILELOOP : WHILE LPAREN comparaison RPAREN LBRACE statements RBRACE'
     while p[3]:
         p[0] = p[6]
         # print(p[6],p[3])
@@ -46,18 +59,18 @@ def p_condition(p):
                  | conditionIFELSE'''
     p[0] = p[1]
 def p_condition_if(p):
-    'conditionIF : IF LPAREN expression RPAREN LBRACE instruction RBRACE'
+    'conditionIF : IF LPAREN expression RPAREN LBRACE statements RBRACE'
     if p[3]:
         p[0] = p[6]
 def p_condition_if_elif(p):
-    '''conditionIFELIF : IF LPAREN expression RPAREN LBRACE instruction RBRACE ELSE conditionIF
-                       | IF LPAREN expression RPAREN LBRACE instruction RBRACE ELSE conditionIFELSE'''
+    '''conditionIFELIF : IF LPAREN expression RPAREN LBRACE statements RBRACE ELSE conditionIF
+                       | IF LPAREN expression RPAREN LBRACE statements RBRACE ELSE conditionIFELSE'''
     if p[3]:
         p[0] = p[6]
     else:
         p[0] = p[9]
 def p_condition_if_else(p):
-    'conditionIFELSE : IF LPAREN expression RPAREN LBRACE instruction RBRACE ELSE LBRACE instruction RBRACE'
+    'conditionIFELSE : IF LPAREN expression RPAREN LBRACE statements RBRACE ELSE LBRACE statements RBRACE'
     if p[3]:
         p[0] = p[6]
     else:
@@ -66,12 +79,12 @@ def p_condition_if_else(p):
 
 
 def p_assignement(p):
-    'assignement : ID ASSIGN expString'
+    'assignement : ID ASSIGN expString SEMICOL'
     p[0] = p[3]
     value_to_assign = p[3]
     identifiers[p[1]] = value_to_assign
 def p_output(p):
-    'output : PRINT LPAREN expString RPAREN'
+    'output : PRINT LPAREN expString RPAREN SEMICOL'
     p[0] = p[3]
 
 def p_expression_string(p):
@@ -173,24 +186,15 @@ def p_error(p):
 
     print(f"Syntax error: Unexpected {token}")
 
-# Build the parser
-
-parser = yacc.yacc()
+start = 'program'
 
 filename = sys.argv[1]
-file_handle = open(filename,"r")
-file_contents = file_handle.read()
-result = parser.parse(file_contents)
 
-print(result)
+# Build the parser
+parser = yacc.yacc()
 
-# parser = yacc.yacc()
+pp = pprint.PrettyPrinter(indent=4)
 
-# while True:
-#    try:
-#        s = input('calc > ')
-#    except EOFError:
-#        break
-#    if not s: continue
-#    result = parser.parse(s)
-#    print(result)
+with open(filename, 'r') as f:
+    input = f.read()
+    pp.pprint(parser.parse(input))

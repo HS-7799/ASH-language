@@ -1,6 +1,11 @@
-ila(5 == 1)
+ila(Ah)
 {
-    kteb("salam");
-} awla {
+    a = 1;
+
+    b = a + 1;
+
+    kteb(b);
+}
+awla {
     kteb("yes");
 }
