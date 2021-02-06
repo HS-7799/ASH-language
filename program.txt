@@ -1,0 +1,6 @@
+ila(5 == 1)
+{
+    kteb("salam");
+} awla {
+    kteb("yes");
+}

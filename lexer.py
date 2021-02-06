@@ -1,4 +1,5 @@
 import ply.lex as lex
+import sys
 
 # List of token names.   This is always required
 tokens = [
@@ -134,14 +135,11 @@ def t_error(t):
 # Build the lexer
 lexer = lex.lex()
 
-# Test it out
-data = '''
-5 + 1.2 - 8
-'''
-
-
+filename=sys.argv[1]
+file_handle=open(filename,"r")
+file_contents=file_handle.read()
 # Give the lexer some input
-lexer.input(data)
+lexer.input(file_contents)
 
 # Tokenize
 while True:

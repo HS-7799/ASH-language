@@ -1,5 +1,5 @@
 import ply.yacc as yacc
-
+import sys
 # Get token from lexer
 from lexer import tokens
 
@@ -174,13 +174,23 @@ def p_error(p):
     print(f"Syntax error: Unexpected {token}")
 
 # Build the parser
+
 parser = yacc.yacc()
 
-while True:
-   try:
-       s = input('calc > ')
-   except EOFError:
-       break
-   if not s: continue
-   result = parser.parse(s)
-   print(result)
+filename = sys.argv[1]
+file_handle = open(filename,"r")
+file_contents = file_handle.read()
+result = parser.parse(file_contents)
+
+print(result)
+
+# parser = yacc.yacc()
+
+# while True:
+#    try:
+#        s = input('calc > ')
+#    except EOFError:
+#        break
+#    if not s: continue
+#    result = parser.parse(s)
+#    print(result)
