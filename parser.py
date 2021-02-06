@@ -30,27 +30,29 @@ def p_instruction(p):
     p[0] = p[1]
 
 def p_loop(p):
-    '''loop : FORlOOP
-            | WHILELOOP'''
+    '''loop : FORlOOP'''
     p[0] = p[1]
 
 def p_for_loop(p):
     'FORlOOP : FOR LPAREN ID ASSIGN expression TO expression RPAREN LBRACE statements RBRACE'
+    # check if there is already a variable with the same identifier
+    tmp = None
+    if p[3] in identifiers:
+        tmp = identifiers[p[3]]
+
     identifiers[p[3]] = int(p[5])
-    debut = identifiers[p[3]]
-    arret = int(p[7])
-    while debut <= arret :
-        p[0] = p[10]
-        debut = debut + 1
+    results = []
+    while identifiers[p[3]] < int(p[7]):
+        results.append(p[10][0])
+        identifiers[p[3]] = identifiers[p[3]] + 1
+    for r in results:
+        print(r)
+    p[0] = p[10]
 
-    
+    if tmp != None:
+        identifiers[p[3]] = tmp
     
 
-def p_while_loop(p):
-    'WHILELOOP : WHILE LPAREN comparaison RPAREN LBRACE statements RBRACE'
-    while p[3]:
-        p[0] = p[6]
-        # print(p[6],p[3])
 
 # conditions
 def p_condition(p):
@@ -85,6 +87,7 @@ def p_assignement(p):
     identifiers[p[1]] = value_to_assign
 def p_output(p):
     'output : PRINT LPAREN expString RPAREN SEMICOL'
+    print(p[3])
     p[0] = p[3]
 
 def p_expression_string(p):
