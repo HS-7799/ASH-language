@@ -56,7 +56,8 @@ reserved = {
    'kmel' : 'CONTINUE',
    # output / input
    'kteb' : 'PRINT',
-   '9ra'  : 'INPUT',
+   'de5elra9m'  : 'INPUT_NUMBER',
+   'de5el'  : 'INPUT',
    # define a function
    'dala' : 'FUNCTION'
 }

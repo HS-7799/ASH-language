@@ -1,6 +1,6 @@
 import ply.yacc as yacc
 import sys
-import pprint
+
 
 # Get token from lexer
 from lexer import tokens
@@ -30,28 +30,22 @@ def p_instruction(p):
     p[0] = p[1]
 
 def p_loop(p):
-    '''loop : FORlOOP'''
+    '''loop : FORlOOP
+            | WHILELOOP'''
     p[0] = p[1]
 
 def p_for_loop(p):
-    'FORlOOP : FOR LPAREN ID ASSIGN expression TO expression RPAREN LBRACE statements RBRACE'
-    # check if there is already a variable with the same identifier
-    tmp = None
-    if p[3] in identifiers:
-        tmp = identifiers[p[3]]
-
-    identifiers[p[3]] = int(p[5])
-    results = []
-    while identifiers[p[3]] < int(p[7]):
-        results.append(p[10][0])
+    'FORlOOP : FOR LPAREN ID TO expression RPAREN LBRACE statements RBRACE'
+    global identifiers
+    p[0] = p[8]
+    while identifiers[p[3]] < int(p[5]):
+        p[0] = p[0] + p[8]
         identifiers[p[3]] = identifiers[p[3]] + 1
-    for r in results:
-        print(r)
-    p[0] = p[10]
 
-    if tmp != None:
-        identifiers[p[3]] = tmp
-    
+def p_while_loop(p):
+    'WHILELOOP : WHILE LPAREN comparaison RPAREN LBRACE statements RBRACE'
+    while p[3]:
+        p[0] = p[6]
 
 
 # conditions
@@ -62,8 +56,9 @@ def p_condition(p):
     p[0] = p[1]
 def p_condition_if(p):
     'conditionIF : IF LPAREN expression RPAREN LBRACE statements RBRACE'
-    if p[3]:
+    if p[3] == True:
         p[0] = p[6]
+
 def p_condition_if_elif(p):
     '''conditionIFELIF : IF LPAREN expression RPAREN LBRACE statements RBRACE ELSE conditionIF
                        | IF LPAREN expression RPAREN LBRACE statements RBRACE ELSE conditionIFELSE'''
@@ -79,22 +74,33 @@ def p_condition_if_else(p):
         p[0] = p[10]
 
 
-
 def p_assignement(p):
-    'assignement : ID ASSIGN expString SEMICOL'
+    'assignement : ID ASSIGN expStringInput SEMICOL'
     p[0] = p[3]
     value_to_assign = p[3]
     identifiers[p[1]] = value_to_assign
 def p_output(p):
     'output : PRINT LPAREN expString RPAREN SEMICOL'
-    print(p[3])
     p[0] = p[3]
+
+def p_expression_string_input(p):
+    '''expStringInput : expString
+                      | input'''
+    p[0] = p[1]
 
 def p_expression_string(p):
     '''expString : expression
                  | STRING'''
     p[0] = p[1]
 
+def p_input(p):
+    '''input : INPUT LPAREN STRING RPAREN
+             | INPUT_NUMBER LPAREN STRING RPAREN'''
+    a = input(p[3])
+    if p[1] == 'de5el' and type(a) is str:
+        p[0] = a
+    elif p[1] == 'de5elra9m':
+            p[0] = float(a)
 
 def p_expression(p):
     '''expression : expression PLUS term
@@ -191,13 +197,11 @@ def p_error(p):
 
 start = 'program'
 
-filename = sys.argv[1]
-
-# Build the parser
 parser = yacc.yacc()
 
-pp = pprint.PrettyPrinter(indent=4)
+filename = sys.argv[1]
+file_handle = open(filename,"r")
+file_contents = file_handle.read()
+result = parser.parse(file_contents)
 
-with open(filename, 'r') as f:
-    input = f.read()
-    pp.pprint(parser.parse(input))
+print(result)
