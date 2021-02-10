@@ -1,9 +1,9 @@
 import ply.yacc as yacc
 import sys
 
-
 # Get token from lexer
 from lexer import tokens
+
 
 # dictionnary that hold identifiers and their values
 identifiers = {}
@@ -104,7 +104,9 @@ def p_input(p):
 
 def p_expression(p):
     '''expression : expression PLUS term
-                  | expression MINUS term'''
+                  | expression MINUS term
+                  | expression OR expression
+                  | expression AND expression'''
     if p[1] == 's7i7a':
         p[1] = 1
     elif p[1] == 'ghalta':
@@ -119,6 +121,12 @@ def p_expression(p):
         p[0] = p[1] + p[3]
     elif p[2] == '-':
         p[0] = p[1] - p[3]
+    elif p[2] == 'ou':
+        p[0] =  's7i7a' if p[1] and p[3] == 1 else 'ghalta'
+    elif p[2] == 'aw':
+        p[0] = 's7i7a' if p[1] or p[3] == 1 else 'ghalta'
+
+
 
 def p_expression_comparaison(p):
     'expression : comparaison'
@@ -154,8 +162,7 @@ def p_term(p):
     '''term : term TIMES factor 
             | term DIVIDE factor 
             | term MODULO factor
-            | term OR factor
-            | term AND factor'''
+    '''
 
     if p[1] == 's7i7a':
         p[1] = 1
@@ -169,10 +176,6 @@ def p_term(p):
     
     if p[2] == '*':
         p[0] = p[1] * p[3]
-    elif p[2] == 'ou':
-        p[0] =  's7i7a' if p[1] and p[3] == 1 else 'ghalta'
-    elif p[2] == 'aw':
-        p[0] = 's7i7a' if p[1] or p[3] == 1 else 'ghalta'
     elif p[3] != 0:
         if p[2] == '/':
             p[0] = p[1] / p[3]

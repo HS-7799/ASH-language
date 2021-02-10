@@ -1,4 +1,4 @@
 a = 5;
 b = 6;
 
-kteb(a != b ou a);
+kteb(a + 1 == b ou a != 5);
