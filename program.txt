@@ -1,1 +1,4 @@
-kteb(5 == 5 == s7i7a);
+a = 5;
+b = 6;
+
+kteb(a != b ou a);
