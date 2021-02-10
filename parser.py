@@ -105,6 +105,16 @@ def p_input(p):
 def p_expression(p):
     '''expression : expression PLUS term
                   | expression MINUS term'''
+    if p[1] == 's7i7a':
+        p[1] = 1
+    elif p[1] == 'ghalta':
+        p[1] = 0
+
+    if p[3] == 's7i7a':
+        p[3] = 1
+    elif p[3] == 'ghalta':
+        p[3] = 0
+
     if p[2] == '+':
         p[0] = p[1] + p[3]
     elif p[2] == '-':
@@ -145,15 +155,26 @@ def p_term(p):
             | term DIVIDE factor 
             | term MODULO factor
             | term AND factor'''
+
+    if p[1] == 's7i7a':
+        p[1] = 1
+    elif p[1] == 'ghalta':
+        p[1] = 0
+
+    if p[3] == 's7i7a':
+        p[3] = 1
+    elif p[3] == 'ghalta':
+        p[3] = 0
+    
     if p[2] == '*':
         p[0] = p[1] * p[3]
-    elif p[2] == '/':
-        if p[3] != 0:
+    elif p[3] != 0:
+        if p[2] == '/':
             p[0] = p[1] / p[3]
-        else:
+        elif p[2] == '%':
+            p[0] = p[1] % p[3]
+    else:
             print("Can't divide by 0")
-    elif p[2] == '%':
-        p[0] = p[1] % p[3]
     
 
 def p_term_factor(p):
