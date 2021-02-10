@@ -56,19 +56,19 @@ def p_condition(p):
     p[0] = p[1]
 def p_condition_if(p):
     'conditionIF : IF LPAREN expression RPAREN LBRACE statements RBRACE'
-    if p[3] == True:
+    if p[3] == 's7i7a':
         p[0] = p[6]
 
 def p_condition_if_elif(p):
     '''conditionIFELIF : IF LPAREN expression RPAREN LBRACE statements RBRACE ELSE conditionIF
                        | IF LPAREN expression RPAREN LBRACE statements RBRACE ELSE conditionIFELSE'''
-    if p[3]:
+    if p[3] == 's7i7a':
         p[0] = p[6]
     else:
         p[0] = p[9]
 def p_condition_if_else(p):
     'conditionIFELSE : IF LPAREN expression RPAREN LBRACE statements RBRACE ELSE LBRACE statements RBRACE'
-    if p[3]:
+    if p[3] == 's7i7a':
         p[0] = p[6]
     else:
         p[0] = p[10]
@@ -123,17 +123,17 @@ def p_comparaison(p):
                    | expression LE term'''
 
     if p[2] == '==':
-        p[0] = p[1] == p[3]
+        p[0] = 's7i7a' if p[1] == p[3] else 'ghalta'
     elif p[2] == '!=':
-        p[0] = p[1] != p[3]
+        p[0] = 's7i7a' if p[1] != p[3] else 'ghalta'
     elif p[2] == '>' :
-        p[0] = p[1] > p[3]
+        p[0] = 's7i7a' if p[1] > p[3] else 'ghalta'
     elif p[2] == '>=':
-        p[0] = p[1] >= p[3]
+        p[0] = 's7i7a' if p[1] >= p[3] else 'ghalta'
     elif p[2] == '<':
-        p[0] = p[1] < p[3]
+        p[0] = 's7i7a' if p[1] < p[3] else 'ghalta'
     elif p[2] == '<=':
-        p[0] = p[1] <= p[3]
+        p[0] = 's7i7a' if p[1] <= p[3] else 'ghalta'
     
 
 def p_expression_term(p) :
@@ -169,10 +169,10 @@ def p_factor_number_ID(p):
               | AccessIdentifier
               | True
               | False'''
-    if p[1] == 'La':
-        p[0] = False
-    elif p[1] == 'Ah':
-        p[0] = True
+    if p[1] == 'ghalta':
+        p[0] = 'ghalta'
+    elif p[1] == 's7i7a':
+        p[0] = 's7i7a'
     else:
         p[0] = p[1]
 

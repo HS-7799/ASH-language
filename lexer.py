@@ -47,8 +47,8 @@ reserved = {
    'likol' : 'FOR',
    'fi' : 'TO',
     # Boolean values
-   'La' : 'False',
-   'Ah' : 'True',
+   'ghalta' : 'False',
+   's7i7a' : 'True',
    # Return
    'reje3' : 'RETURN',
    # break / continue
