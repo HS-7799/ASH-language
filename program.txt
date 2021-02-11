@@ -1,19 +1,7 @@
-i = 0;
-s = 0;
-n = de5elra9m("donner un numero : ");
+a = 5;
 
-
-likol(i fi n)
-{l
-    s = s + i;
-}l
-
-kteb(s);
-
-ma7ed(i > 0)
-{m
-    kteb(i);
-    i = i - 1;
-}m
-
-kteb(i);
+ma7ed(a > 0)
+{w
+    kteb(a);
+    a = a - 1;
+}w

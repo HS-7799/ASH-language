@@ -1,16 +1,9 @@
 import ply.yacc as yacc
 import sys
-from helpers import flatten,display_result,for_loops_statements,while_loops_statements
+from helpers import flatten,display_result,for_loop,while_loop,parse_input
 
 # Get token from lexer
 from lexer import tokens
-
-#function that parse a string and display the result
-def parse_display(s):
-    # parse s
-    result = parser.parse(s)
-    # add result of parsing to the array that holds results of parsing
-    results_parsed.append(result)
 
 
 #result to display
@@ -22,21 +15,6 @@ results_parsed = []
 # dictionnary that holds identifiers and their values
 identifiers = {}
 
-# code that is not executed yet
-content_not_executed_yet = ""
-
-#                          ____________________________________
-#                         |                                   |
-# array that contains statements inside for(likom) loop {l statements }l
-for_loops = []
-parsed_for_loop_count = 0
-
-#                           __________________________________________________
-#                           |        ________________________________________|________________
-#                           |        |                                       |              |
-# array that contains (condition,statements) inside for(likom) loop ma7ed(condition){m statements }m
-while_loops = []
-parsed_while_loop_count = 0
 
 def p_program(p):
     'program : statements'
@@ -67,32 +45,22 @@ def p_loop(p):
 
 def p_for_loop(p):
     'FORlOOP : FOR LPAREN ID TO expression RPAREN LBRACEL statements RBRACEL'
-    global identifiers
-    global parsed_for_loop_count
-    while identifiers[p[3]] <= int(p[5]):
-        parse_display(for_loops[parsed_for_loop_count])
-        identifiers[p[3]] = identifiers[p[3]] + 1
-    x = "{l" + for_loops[parsed_for_loop_count] + "}l"
-    parsed_for_loop_count +=  1
-    content_not_executed_yet=file_contents.split(x)[1].replace('\n','')
-    if  content_not_executed_yet != "":
-        parse_display(content_not_executed_yet)
+    # global identifiers
+    # global parsed_for_loop_count
+    # while identifiers[p[3]] <= int(p[5]):
+    #     parse_display(for_loops[parsed_for_loop_count])
+    #     identifiers[p[3]] = identifiers[p[3]] + 1
+    # x = "{l" + for_loops[parsed_for_loop_count] + "}l"
+    # parsed_for_loop_count +=  1
+    # content_not_executed_yet=file_contents.split(x)[1].replace('\n','')
+    # if  content_not_executed_yet != "":
+    #     parse_display(content_not_executed_yet)
+    pass
     
 
 def p_while_loop(p):
     'WHILELOOP : WHILE LPAREN comparaison RPAREN LBRACEM statements RBRACEM'
-    
-    global parsed_while_loop_count
-    while True:
-        condition = parser.parse(while_loops[parsed_while_loop_count]["condition"])
-        if condition[0] == 'ghalta':
-            break
-        parse_display(while_loops[parsed_while_loop_count]["statements"])
-    x = "{m" + while_loops[parsed_while_loop_count]["statements"] + "}m"
-    content_not_executed_yet=file_contents.split(x)[1].replace('\n','')
-    parsed_while_loop_count +=  1
-    if content_not_executed_yet != "":
-        parse_display(content_not_executed_yet)
+    pass
     
 
 # conditions
@@ -103,6 +71,7 @@ def p_condition(p):
     p[0] = p[1]
 def p_condition_if(p):
     'conditionIF : IF LPAREN expression RPAREN LBRACE statements RBRACE'
+    print(p[0])
     if p[3] == 's7i7a':
         p[0] = p[6]
 
@@ -280,14 +249,25 @@ file_handle = open(filename,"r")
 # file contents is the code written in your program
 file_contents = file_handle.read()
 
-# if there is any for loop(likol), i append the statement inside in for_loops array
-for_loops = for_loops_statements(file_contents)
 
-# if there is any for while(ma7ed), i append the condition,statement inside in while_loops array
-while_loops = while_loops_statements(file_contents)
 
-# parse the content of file
-parser.parse(file_contents)
+blocks = parse_input(file_contents)
 
-# display result of program
-display_result(results_display,results_parsed)
+for i in range(len(blocks)):
+    if 'likol' in blocks[i]:
+        loop = for_loop(blocks[i])
+        while identifiers[loop["identifier"]] <= int(loop["to"]):
+            results_parsed.append(parser.parse(loop["statements"]))
+            identifiers[loop["identifier"]] += 1
+
+    elif 'ma7ed' in blocks[i]:
+        condition = while_loop(blocks[i])["condition"]
+        statements = while_loop(blocks[i])["statements"]
+        while True:
+            if parser.parse(condition)[0] == 'ghalta':
+                break
+            results_parsed.append(parser.parse(statements))
+    else:
+        results_parsed.append(parser.parse(blocks[i]))
+
+display_result(results_display,flatten(results_parsed))
