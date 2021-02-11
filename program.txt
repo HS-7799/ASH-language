@@ -1,20 +1,19 @@
-n = 5;
-
 i = 0;
+s = 0;
+n = de5elra9m("donner un numero : ");
+
 
 likol(i fi n)
 {l
-    kteb(i);
-
+    s = s + i;
 }l
 
-/*salam*/
+kteb(s);
 
-ila(i == 5)
-{
-    kteb("i == 5");
-}
-awla
-{
-    kteb("i est different de 5");
-}
+ma7ed(i > 0)
+{m
+    kteb(i);
+    i = i - 1;
+}m
+
+kteb(i);

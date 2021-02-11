@@ -1,24 +1,40 @@
 import ply.yacc as yacc
 import sys
+from helpers import flatten,display_result,for_loops_statements,while_loops_statements
 
 # Get token from lexer
 from lexer import tokens
 
+#function that parse a string and display the result
 def parse_display(s):
-    result = parser.parse(s.replace('\n',''))
-    for r in result:
-            if not r == None:
-                print(r)
+    # parse s
+    result = parser.parse(s)
+    # add result of parsing to the array that holds results of parsing
+    results_parsed.append(result)
 
 
-# dictionnary that hold identifiers and their values
+#result to display
+results_display = []
+
+#result of parsing input
+results_parsed = []
+
+# dictionnary that holds identifiers and their values
 identifiers = {}
 
+# code that is not executed yet
 content_not_executed_yet = ""
 
+#                          ____________________________________
+#                         |                                   |
+# array that contains statements inside for(likom) loop {l statements }l
 for_loops = []
 parsed_for_loop_count = 0
 
+#                           __________________________________________________
+#                           |        ________________________________________|________________
+#                           |        |                                       |              |
+# array that contains (condition,statements) inside for(likom) loop ma7ed(condition){m statements }m
 while_loops = []
 parsed_while_loop_count = 0
 
@@ -58,7 +74,7 @@ def p_for_loop(p):
         identifiers[p[3]] = identifiers[p[3]] + 1
     x = "{l" + for_loops[parsed_for_loop_count] + "}l"
     parsed_for_loop_count +=  1
-    content_not_executed_yet=file_contents.split(x)[1]
+    content_not_executed_yet=file_contents.split(x)[1].replace('\n','')
     if  content_not_executed_yet != "":
         parse_display(content_not_executed_yet)
     
@@ -73,13 +89,11 @@ def p_while_loop(p):
             break
         parse_display(while_loops[parsed_while_loop_count]["statements"])
     x = "{m" + while_loops[parsed_while_loop_count]["statements"] + "}m"
-    content_not_executed_yet=file_contents.split(x)[1]
+    content_not_executed_yet=file_contents.split(x)[1].replace('\n','')
     parsed_while_loop_count +=  1
     if content_not_executed_yet != "":
         parse_display(content_not_executed_yet)
     
-
-
 
 # conditions
 def p_condition(p):
@@ -116,6 +130,7 @@ def p_assignement(p):
 def p_output(p):
     'output : PRINT LPAREN expString RPAREN SEMICOL'
     p[0] = p[3]
+    results_display.append(p[3])
 
 def p_expression_string_input(p):
     '''expStringInput : expString
@@ -260,27 +275,19 @@ def p_error(p):
 start = 'program'
 
 parser = yacc.yacc()
-
 filename = sys.argv[1]
 file_handle = open(filename,"r")
+# file contents is the code written in your program
 file_contents = file_handle.read()
 
-a = file_contents.split("{l")
-for i in range(1,len(a)):
-	for_loops.append(str(a[i].split("}l")[0]))
+# if there is any for loop(likol), i append the statement inside in for_loops array
+for_loops = for_loops_statements(file_contents)
 
-condition = ""
-b = file_contents.split("{m")
-for i in range(1,len(b)):
-    loop = {}
-    if b[i-1].find("ma7ed") != -1:
-        condition = b[i-1].split("(")[len(b[i-1].split("(")) - 1].split(")")[0]
-    statements = b[i].split("}m")[0]
-    
-    loop["condition"] = condition
-    loop["statements"] = statements
+# if there is any for while(ma7ed), i append the condition,statement inside in while_loops array
+while_loops = while_loops_statements(file_contents)
 
-    while_loops.append(loop)
+# parse the content of file
+parser.parse(file_contents)
 
-result = parser.parse(file_contents)
-print(result)
+# display result of program
+display_result(results_display,results_parsed)
