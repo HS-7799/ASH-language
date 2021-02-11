@@ -22,6 +22,10 @@ tokens = [
    'RPAREN',
    'LBRACE',
    'RBRACE',
+   'LBRACEL',
+   'RBRACEL',
+   'LBRACEM',
+   'RBRACEM',
    'LBRACKET',
    'RBRACKET',
    'ASSIGN',
@@ -80,6 +84,10 @@ t_LPAREN   = r'\('
 t_RPAREN   = r'\)'
 t_LBRACE   = r'{'
 t_RBRACE   = r'}'
+t_LBRACEL   = r'{l'
+t_RBRACEL   = r'}l'
+t_LBRACEM   = r'{m'
+t_RBRACEM   = r'}m'
 t_LBRACKET = r'\['
 t_RBRACKET = r']'
 t_ASSIGN   = r'='
@@ -114,7 +122,8 @@ def t_STRING(t):
 
 #comment
 def t_COMMENT(t):
-    r'//.*'
+    # r'//.*'
+    r'/\*(.|\n)*?\*/'
     pass
     # No return value. Token discarded
 

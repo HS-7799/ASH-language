@@ -8,6 +8,12 @@ from lexer import tokens
 # dictionnary that hold identifiers and their values
 identifiers = {}
 
+for_loops = []
+parsed_for_loop_count = 0
+
+while_loops = []
+parsed_while_loop_count = 0
+
 def p_program(p):
     'program : statements'
     p[0] = p[1]
@@ -25,6 +31,7 @@ def p_statements(p):
 def p_instruction(p):
     '''statement   : assignement
                    | output
+                   | expression
                    | loop
                    | condition'''
     p[0] = p[1]
@@ -35,17 +42,35 @@ def p_loop(p):
     p[0] = p[1]
 
 def p_for_loop(p):
-    'FORlOOP : FOR LPAREN ID TO expression RPAREN LBRACE statements RBRACE'
+    'FORlOOP : FOR LPAREN ID TO expression RPAREN LBRACEL statements RBRACEL'
     global identifiers
-    p[0] = p[8]
-    while identifiers[p[3]] < int(p[5]):
-        p[0] = p[0] + p[8]
+    global parsed_for_loop_count
+    while identifiers[p[3]] <= int(p[5]):
+        result = parser.parse(for_loops[parsed_for_loop_count])
+        for r in result:
+            if not r == None:
+                print(r)
         identifiers[p[3]] = identifiers[p[3]] + 1
+    parsed_for_loop_count +=  1
+     
+    
+    
 
 def p_while_loop(p):
-    'WHILELOOP : WHILE LPAREN comparaison RPAREN LBRACE statements RBRACE'
-    while p[3]:
-        p[0] = p[6]
+    'WHILELOOP : WHILE LPAREN comparaison RPAREN LBRACEM statements RBRACEM'
+    
+    global parsed_while_loop_count
+    while True:
+        condition = parser.parse(while_loops[parsed_while_loop_count]["condition"])
+        if condition[0] == 'ghalta':
+            break
+        result = parser.parse(while_loops[parsed_while_loop_count]["statements"])
+        for r in result:
+            if not r == None:
+                print(r)
+    parsed_while_loop_count +=  1
+    
+
 
 
 # conditions
@@ -58,6 +83,7 @@ def p_condition_if(p):
     'conditionIF : IF LPAREN expression RPAREN LBRACE statements RBRACE'
     if p[3] == 's7i7a':
         p[0] = p[6]
+
 
 def p_condition_if_elif(p):
     '''conditionIFELIF : IF LPAREN expression RPAREN LBRACE statements RBRACE ELSE conditionIF
@@ -221,7 +247,6 @@ def p_error(p):
         token = "end of file"
     else:
         token = f"{p.type}({p.value}) on line {p.lineno}"
-
     print(f"Syntax error: Unexpected {token}")
 
 start = 'program'
@@ -231,6 +256,26 @@ parser = yacc.yacc()
 filename = sys.argv[1]
 file_handle = open(filename,"r")
 file_contents = file_handle.read()
-result = parser.parse(file_contents)
 
+a = file_contents.split("{l")
+for i in range(1,len(a)):
+	for_loops.append(str(a[i].split("}l")[0]))
+
+condition = ""
+b = file_contents.split("{m")
+for i in range(1,len(b)):
+    loop = {}
+    if b[i-1].find("ma7ed") != -1:
+        condition = b[i-1].split("(")[len(b[i-1].split("(")) - 1].split(")")[0]
+    statements = b[i].split("}m")[0]
+    
+    loop["condition"] = condition
+    loop["statements"] = statements
+
+    while_loops.append(loop)
+
+
+
+
+result = parser.parse(file_contents)
 print(result)
