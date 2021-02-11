@@ -4,9 +4,17 @@ import sys
 # Get token from lexer
 from lexer import tokens
 
+def parse_display(s):
+    result = parser.parse(s.replace('\n',''))
+    for r in result:
+            if not r == None:
+                print(r)
+
 
 # dictionnary that hold identifiers and their values
 identifiers = {}
+
+content_not_executed_yet = ""
 
 for_loops = []
 parsed_for_loop_count = 0
@@ -46,14 +54,13 @@ def p_for_loop(p):
     global identifiers
     global parsed_for_loop_count
     while identifiers[p[3]] <= int(p[5]):
-        result = parser.parse(for_loops[parsed_for_loop_count])
-        for r in result:
-            if not r == None:
-                print(r)
+        parse_display(for_loops[parsed_for_loop_count])
         identifiers[p[3]] = identifiers[p[3]] + 1
+    x = "{l" + for_loops[parsed_for_loop_count] + "}l"
     parsed_for_loop_count +=  1
-     
-    
+    content_not_executed_yet=file_contents.split(x)[1]
+    if  content_not_executed_yet != "":
+        parse_display(content_not_executed_yet)
     
 
 def p_while_loop(p):
@@ -64,11 +71,12 @@ def p_while_loop(p):
         condition = parser.parse(while_loops[parsed_while_loop_count]["condition"])
         if condition[0] == 'ghalta':
             break
-        result = parser.parse(while_loops[parsed_while_loop_count]["statements"])
-        for r in result:
-            if not r == None:
-                print(r)
+        parse_display(while_loops[parsed_while_loop_count]["statements"])
+    x = "{m" + while_loops[parsed_while_loop_count]["statements"] + "}m"
+    content_not_executed_yet=file_contents.split(x)[1]
     parsed_while_loop_count +=  1
+    if content_not_executed_yet != "":
+        parse_display(content_not_executed_yet)
     
 
 
@@ -273,9 +281,6 @@ for i in range(1,len(b)):
     loop["statements"] = statements
 
     while_loops.append(loop)
-
-
-
 
 result = parser.parse(file_contents)
 print(result)

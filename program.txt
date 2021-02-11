@@ -1,4 +1,20 @@
-a = 5;
-b = 6;
+n = 5;
 
-kteb(a + 1 == b ou a == 5);
+i = 0;
+
+likol(i fi n)
+{l
+    kteb(i);
+
+}l
+
+/*salam*/
+
+ila(i == 5)
+{
+    kteb("i == 5");
+}
+awla
+{
+    kteb("i est different de 5");
+}
