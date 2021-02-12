@@ -1,12 +1,12 @@
-t = [];
+t = [1,20,4,25,94];
 
-
-likol(i = 0 fi 5)
+likol(i = 0 fi 4)
 {f
-    t[i] = de5elra9m("3tini : ");
+    ila(t[i] % 2 == 0)
+    {
+        kteb(t[i]);
+    }
 }f
 
-likol(i = 0 fi 5)
-{f
-    kteb(t[i]);
-}f
+/* i is a local variable si its not available outside of loop */
+kteb(i);

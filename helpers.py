@@ -81,5 +81,5 @@ def flatten(list_of_lists):
 
 def display_result(results_display,results_parsed):
     for i in range(len(results_display)):
-        if (len(list(filter (lambda x : x == results_display[i], results_parsed))) > 0):
+        if (len(list(filter (lambda x : x == results_display[i], results_parsed))) > 0) and not results_display[i] == None:
             print(results_display[i])

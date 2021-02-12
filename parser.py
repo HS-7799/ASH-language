@@ -15,6 +15,31 @@ results_parsed = []
 # dictionnary that holds identifiers and their values
 identifiers = {}
 
+def get_variable(key):
+    if "[" in key and "]" in key:
+        try:
+            array_name = key.split('[')[0]
+            index = int(key.split('[')[1].replace(']',''))
+            return identifiers[array_name][index]
+        except IndexError:
+            print("list index out of range")
+    else:
+        try:
+            return identifiers[key]
+        except :
+            print("variable '",key,"' is not defined")
+
+def set_variable(name,content):
+
+    if "[" in name and "]" in name:
+        array_name = name.split('[')[0]
+        index = int(name.split('[')[1].replace(']',''))
+        identifiers[array_name][index] = content
+    else:
+        identifiers[name] = content
+
+def remove_variable(name):
+    del identifiers[name]
 
 def p_program(p):
     'program : statements'
@@ -120,7 +145,8 @@ def p_array_var(p):
     'array_var : ID LBRACKET index RBRACKET'
     value_between_brackets = p[3]
     if type(p[3]) is str:
-        value_between_brackets = int(identifiers[p[3]])
+        value_between_brackets = int(get_variable(p[3]))
+
     p[0] = p[1] + "[" + str(value_between_brackets) + "]"
 
 def p_index(p):
@@ -132,11 +158,8 @@ def p_index(p):
 
 def p_assignement(p):
     'assignement : var ASSIGN assignedValue SEMICOL'
-    if type(p[3]) is list:
-        for i in range(len(p[3])):
-            id = p[1] + "[" + str(i) + "]"
-            identifiers[id] = p[3][i]
-    identifiers[p[1]] = p[3]
+    set_variable(p[1],p[3])
+
 
 def p_output(p):
     'output : PRINT LPAREN expString RPAREN SEMICOL'
@@ -267,11 +290,7 @@ def p_number(p):
 
 def p_access_iden(p):
     'AccessIdentifier : var'
-    try:
-        p[0] = identifiers[p[1]]
-    except:
-        print("No such variable called",p[1])
-        exit()
+    p[0] = get_variable(p[1])
 
 # Error rule for syntax errors
 def p_error(p):
@@ -298,15 +317,16 @@ for i in range(len(blocks)):
             to = int(loop["to"])
         except:
             if loop["to"] in identifiers:
-                to = identifiers[loop["to"]]
+                to = get_variable(loop["to"])
             else:
                 print("No such variable",loop["to"])
                 exit()
-        identifiers[loop["identifier"]] = int(loop["from"])
-        while identifiers[loop["identifier"]] <= to:
+        set_variable(loop["identifier"],int(loop["from"]))
+        while get_variable(loop["identifier"]) <= to:
             results_parsed.append(parser.parse(loop["statements"]))
-            identifiers[loop["identifier"]] += int(loop["step"])
-        del identifiers[loop["identifier"]]
+            value = get_variable(loop["identifier"]) + int(loop["step"])
+            set_variable(loop["identifier"],value)
+        remove_variable(loop["identifier"])
 
     elif 'ma7ed' in blocks[i]:
         condition = while_loop(blocks[i])["condition"]
@@ -319,3 +339,4 @@ for i in range(len(blocks)):
         results_parsed.append(parser.parse(blocks[i]))
 
 display_result(results_display,flatten(results_parsed))
+
