@@ -1,8 +1,6 @@
-i = 0;
-a = de5elra9m("donne : ");
 
-ma7ed(i <= a)
-{w
+
+likol(i = 0 fi 5)
+{f
     kteb(i);
-    i = i + 1;
-}w
+}f

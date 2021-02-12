@@ -44,7 +44,7 @@ def p_loop(p):
     p[0] = p[1]
 
 def p_for_loop(p):
-    'FORlOOP : FOR LPAREN ID TO expression RPAREN LBRACEL statements RBRACEL'
+    'FORlOOP : FOR LPAREN ID ASSIGN NUMBER TO expression RPAREN LBRACEL statements RBRACEL'
     pass
     
 
@@ -256,9 +256,11 @@ for i in range(len(blocks)):
             else:
                 print("No such variable",loop["to"])
                 exit()
+        identifiers[loop["identifier"]] = int(loop["from"])
         while identifiers[loop["identifier"]] <= to:
             results_parsed.append(parser.parse(loop["statements"]))
-            identifiers[loop["identifier"]] += 1
+            identifiers[loop["identifier"]] += int(loop["step"])
+        del identifiers[loop["identifier"]]
 
     elif 'ma7ed' in blocks[i]:
         condition = while_loop(blocks[i])["condition"]
