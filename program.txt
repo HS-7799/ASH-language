@@ -1,3 +1,12 @@
-t = [5,2,3];
+t = [];
 
-kteb(t[0]);
+
+likol(i = 0 fi 5)
+{f
+    t[i] = de5elra9m("3tini : ");
+}f
+
+likol(i = 0 fi 5)
+{f
+    kteb(t[i]);
+}f

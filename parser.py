@@ -65,7 +65,6 @@ def p_condition_if(p):
     if p[3] == 's7i7a':
         p[0] = p[6]
 
-
 def p_condition_if_elif(p):
     '''conditionIFELIF : IF LPAREN expression RPAREN LBRACE statements RBRACE ELSE conditionIF
                        | IF LPAREN expression RPAREN LBRACE statements RBRACE ELSE conditionIFELSE'''
@@ -83,14 +82,62 @@ def p_condition_if_else(p):
 
 #end conditions
 
+#array
+def p_array(p):
+    'array : LBRACKET numbers RBRACKET'
+    p[0] = p[2]
+
+def p_numbers(p):
+    '''
+        numbers : numbers COMMA NUMBER
+                | NUMBER
+    '''
+    if len(p) == 2:
+        p[0] = [p[1]]
+    else:
+        p[0] = p[1] + [p[3]]
+#end array
+
+#input
+def p_input(p):
+    '''input : INPUT LPAREN STRING RPAREN
+             | INPUT_NUMBER LPAREN STRING RPAREN'''
+    a = input(p[3])
+    if p[1] == 'de5el' and type(a) is str:
+        p[0] = a
+    elif p[1] == 'de5elra9m':
+            p[0] = float(a)
+#end input
+
+def p_var(p):
+    '''
+        var : ID
+            | array_var
+    '''
+    p[0] = p[1]
+    
+def p_array_var(p):
+    'array_var : ID LBRACKET index RBRACKET'
+    value_between_brackets = p[3]
+    if type(p[3]) is str:
+        value_between_brackets = int(identifiers[p[3]])
+    p[0] = p[1] + "[" + str(value_between_brackets) + "]"
+
+def p_index(p):
+    '''
+        index : INT
+              | var
+    '''
+    p[0] = p[1]
+
 def p_assignement(p):
-    'assignement : ID ASSIGN assignedValue SEMICOL'
+    'assignement : var ASSIGN assignedValue SEMICOL'
     if type(p[3]) is list:
         for i in range(len(p[3])):
             id = p[1] + "[" + str(i) + "]"
             identifiers[id] = p[3][i]
-
     identifiers[p[1]] = p[3]
+
 def p_output(p):
     'output : PRINT LPAREN expString RPAREN SEMICOL'
     p[0] = p[3]
@@ -107,30 +154,7 @@ def p_expression_string(p):
                  | STRING'''
     p[0] = p[1]
 
-def p_array(p):
-    'array : LBRACKET numbers RBRACKET'
-    p[0] = p[2]
 
-def p_numbers(p):
-    '''
-        numbers : numbers COMMA NUMBER
-                | NUMBER
-    '''
-    if len(p) == 2:
-        p[0] = [p[1]]
-    else:
-        p[0] = p[1] + [p[3]]
-
-
-
-def p_input(p):
-    '''input : INPUT LPAREN STRING RPAREN
-             | INPUT_NUMBER LPAREN STRING RPAREN'''
-    a = input(p[3])
-    if p[1] == 'de5el' and type(a) is str:
-        p[0] = a
-    elif p[1] == 'de5elra9m':
-            p[0] = float(a)
 
 def p_expression(p):
     '''expression : expression PLUS term
@@ -235,13 +259,14 @@ def p_factor_number_ID(p):
     else:
         p[0] = p[1]
 
+# number = int or float
 def p_number(p):
     '''NUMBER : INT
               | FLOAT'''
     p[0] = p[1]
 
 def p_access_iden(p):
-    'AccessIdentifier : ID'
+    'AccessIdentifier : var'
     try:
         p[0] = identifiers[p[1]]
     except:
@@ -263,8 +288,6 @@ filename = sys.argv[1]
 file_handle = open(filename,"r")
 # file contents is the code written in your program
 file_contents = file_handle.read()
-
-
 
 blocks = parse_input(file_contents)
 
