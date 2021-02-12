@@ -45,16 +45,6 @@ def p_loop(p):
 
 def p_for_loop(p):
     'FORlOOP : FOR LPAREN ID TO expression RPAREN LBRACEL statements RBRACEL'
-    # global identifiers
-    # global parsed_for_loop_count
-    # while identifiers[p[3]] <= int(p[5]):
-    #     parse_display(for_loops[parsed_for_loop_count])
-    #     identifiers[p[3]] = identifiers[p[3]] + 1
-    # x = "{l" + for_loops[parsed_for_loop_count] + "}l"
-    # parsed_for_loop_count +=  1
-    # content_not_executed_yet=file_contents.split(x)[1].replace('\n','')
-    # if  content_not_executed_yet != "":
-    #     parse_display(content_not_executed_yet)
     pass
     
 
@@ -71,7 +61,6 @@ def p_condition(p):
     p[0] = p[1]
 def p_condition_if(p):
     'conditionIF : IF LPAREN expression RPAREN LBRACE statements RBRACE'
-    print(p[0])
     if p[3] == 's7i7a':
         p[0] = p[6]
 
@@ -93,7 +82,7 @@ def p_condition_if_else(p):
 
 def p_assignement(p):
     'assignement : ID ASSIGN expStringInput SEMICOL'
-    p[0] = p[3]
+    # p[0] = p[3]
     value_to_assign = p[3]
     identifiers[p[1]] = value_to_assign
 def p_output(p):
@@ -230,8 +219,11 @@ def p_number(p):
 
 def p_access_iden(p):
     'AccessIdentifier : ID'
-    p[0] = identifiers[p[1]]
-
+    try:
+        p[0] = identifiers[p[1]]
+    except:
+        print("No such variable called",p[1])
+        exit()
 
 # Error rule for syntax errors
 def p_error(p):
@@ -256,7 +248,15 @@ blocks = parse_input(file_contents)
 for i in range(len(blocks)):
     if 'likol' in blocks[i]:
         loop = for_loop(blocks[i])
-        while identifiers[loop["identifier"]] <= int(loop["to"]):
+        try:
+            to = int(loop["to"])
+        except:
+            if loop["to"] in identifiers:
+                to = identifiers[loop["to"]]
+            else:
+                print("No such variable",loop["to"])
+                exit()
+        while identifiers[loop["identifier"]] <= to:
             results_parsed.append(parser.parse(loop["statements"]))
             identifiers[loop["identifier"]] += 1
 
@@ -271,3 +271,4 @@ for i in range(len(blocks)):
         results_parsed.append(parser.parse(blocks[i]))
 
 display_result(results_display,flatten(results_parsed))
+

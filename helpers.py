@@ -50,7 +50,7 @@ def for_loop(s):
     a = s.split("{f")
     condition = a[0].split('(')[1].split('fi')
     loop["identifier"] = condition[0].split('=')[0].replace(' ','')
-    loop["to"] = int(condition[1].replace(')',''))
+    loop["to"] = condition[1].replace(')','').replace(' ','')
     for i in range(1,len(a)):
         loop["statements"] = str(a[i].split("}f")[0])
     return loop

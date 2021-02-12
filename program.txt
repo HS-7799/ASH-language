@@ -1,7 +1,8 @@
-a = 5;
+i = 0;
+a = de5elra9m("donne : ");
 
-ma7ed(a > 0)
+ma7ed(i <= a)
 {w
-    kteb(a);
-    a = a - 1;
+    kteb(i);
+    i = i + 1;
 }w
