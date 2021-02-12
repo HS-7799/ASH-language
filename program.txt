@@ -1,6 +1,3 @@
+t = [5,2,3];
 
-
-likol(i = 0 fi 5)
-{f
-    kteb(i);
-}f
+kteb(t[0]);

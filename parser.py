@@ -38,6 +38,7 @@ def p_instruction(p):
                    | condition'''
     p[0] = p[1]
 
+#loop
 def p_loop(p):
     '''loop : FORlOOP
             | WHILELOOP'''
@@ -47,11 +48,10 @@ def p_for_loop(p):
     'FORlOOP : FOR LPAREN ID ASSIGN NUMBER TO expression RPAREN LBRACEL statements RBRACEL'
     pass
     
-
 def p_while_loop(p):
     'WHILELOOP : WHILE LPAREN comparaison RPAREN LBRACEM statements RBRACEM'
     pass
-    
+#end loop
 
 # conditions
 def p_condition(p):
@@ -59,6 +59,7 @@ def p_condition(p):
                  | conditionIFELIF
                  | conditionIFELSE'''
     p[0] = p[1]
+
 def p_condition_if(p):
     'conditionIF : IF LPAREN expression RPAREN LBRACE statements RBRACE'
     if p[3] == 's7i7a':
@@ -72,6 +73,7 @@ def p_condition_if_elif(p):
         p[0] = p[6]
     else:
         p[0] = p[9]
+
 def p_condition_if_else(p):
     'conditionIFELSE : IF LPAREN expression RPAREN LBRACE statements RBRACE ELSE LBRACE statements RBRACE'
     if p[3] == 's7i7a':
@@ -79,26 +81,47 @@ def p_condition_if_else(p):
     else:
         p[0] = p[10]
 
+#end conditions
 
 def p_assignement(p):
-    'assignement : ID ASSIGN expStringInput SEMICOL'
-    # p[0] = p[3]
-    value_to_assign = p[3]
-    identifiers[p[1]] = value_to_assign
+    'assignement : ID ASSIGN assignedValue SEMICOL'
+    if type(p[3]) is list:
+        for i in range(len(p[3])):
+            id = p[1] + "[" + str(i) + "]"
+            identifiers[id] = p[3][i]
+
+    identifiers[p[1]] = p[3]
 def p_output(p):
     'output : PRINT LPAREN expString RPAREN SEMICOL'
     p[0] = p[3]
     results_display.append(p[3])
 
 def p_expression_string_input(p):
-    '''expStringInput : expString
-                      | input'''
+    '''assignedValue : expString
+                     | array
+                     | input'''
     p[0] = p[1]
 
 def p_expression_string(p):
     '''expString : expression
                  | STRING'''
     p[0] = p[1]
+
+def p_array(p):
+    'array : LBRACKET numbers RBRACKET'
+    p[0] = p[2]
+
+def p_numbers(p):
+    '''
+        numbers : numbers COMMA NUMBER
+                | NUMBER
+    '''
+    if len(p) == 2:
+        p[0] = [p[1]]
+    else:
+        p[0] = p[1] + [p[3]]
+
+
 
 def p_input(p):
     '''input : INPUT LPAREN STRING RPAREN
@@ -273,4 +296,3 @@ for i in range(len(blocks)):
         results_parsed.append(parser.parse(blocks[i]))
 
 display_result(results_display,flatten(results_parsed))
-
