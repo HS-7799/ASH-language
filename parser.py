@@ -16,25 +16,35 @@ results_parsed = []
 identifiers = {}
 
 def get_variable(key):
-    if "[" in key and "]" in key:
-        try:
-            array_name = key.split('[')[0]
-            index = int(key.split('[')[1].replace(']',''))
-            return identifiers[array_name][index]
-        except IndexError:
-            print("list index out of range")
-    else:
-        try:
+    var_name = key.split('[')[0]
+    if var_name in identifiers:
+        if '[' in key and ']' in key:
+            if type(identifiers[var_name]) is list:
+                index = int(key.split('[')[1].replace(']',''))
+                if index in range(len(identifiers[var_name])):
+                    return identifiers[var_name][index]
+                else:
+                    print("list index out of range")
+                    exit()
+            else:
+                print("'",var_name,"' object is not subscriptable")
+                exit()
+        else:
             return identifiers[key]
-        except :
-            print("variable '",key,"' is not defined")
+
+    else:
+        print("variable '",var_name,"' is not defined")
 
 def set_variable(name,content):
 
     if "[" in name and "]" in name:
         array_name = name.split('[')[0]
         index = int(name.split('[')[1].replace(']',''))
-        identifiers[array_name][index] = content
+        if array_name in identifiers:
+            identifiers[array_name][index] = content
+        else:
+            print(array_name + " it's undefined")
+            exit()
     else:
         identifiers[name] = content
 
@@ -58,6 +68,7 @@ def p_statements(p):
 def p_instruction(p):
     '''statement   : assignement
                    | output
+                   | input
                    | expression
                    | loop
                    | condition'''
@@ -125,13 +136,17 @@ def p_numbers(p):
 
 #input
 def p_input(p):
-    '''input : INPUT LPAREN STRING RPAREN
-             | INPUT_NUMBER LPAREN STRING RPAREN'''
-    a = input(p[3])
-    if p[1] == 'de5el' and type(a) is str:
-        p[0] = a
-    elif p[1] == 'de5elra9m':
-            p[0] = float(a)
+    '''input : INPUT LPAREN var COMMA STRING RPAREN SEMICOL
+             |  INPUT_NUMBER LPAREN var COMMA STRING RPAREN SEMICOL'''
+    a = input(p[5])
+    if p[1] == 'de5elra9m':
+        try:
+            a = float(a)
+        except:
+            print("could not convert string to float: '" + a +"'")
+            exit()
+    set_variable(p[3],a)
+    p[0] = a
 #end input
 
 def p_var(p):
@@ -168,8 +183,7 @@ def p_output(p):
 
 def p_expression_string_input(p):
     '''assignedValue : expString
-                     | array
-                     | input'''
+                     | array'''
     p[0] = p[1]
 
 def p_expression_string(p):
@@ -340,3 +354,4 @@ for i in range(len(blocks)):
 
 display_result(results_display,flatten(results_parsed))
 
+print(identifiers)
