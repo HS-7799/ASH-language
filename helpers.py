@@ -4,7 +4,10 @@ def function1(s):
     block1 = s.split('{w')[0].split('ma7ed')
     while_statement = block1.pop()
     if len(block1[0]) != 0:
-        blocks.append(block1[0])
+        if block1[0].find("de5el") != -1:
+            divise_blocks(block1[0])
+        else:
+            blocks.append(block1[0])
     b = s.split('{w')[1].split('}w')
     blocks.append('ma7ed'+while_statement + "{w" + b[0] + "}w")
     return '}w'.join(s.split('}w')[1:])
@@ -13,7 +16,10 @@ def function2(s):
     block2 = s.split('{f')[0].split('likol')
     for_statement = block2.pop()
     if len(block2[0]) != 0:
-        blocks.append(block2[0])
+        if block2[0].find("de5el") != -1:
+            divise_blocks(block2[0])
+        else:
+            blocks.append(block2[0])
     b = s.split('{f')[1].split('}f')
     blocks.append('likol'+for_statement + "{f" + b[0] + "}f")
     return '}f'.join(s.split('}f')[1:])
@@ -37,6 +43,17 @@ def divise_blocks(s):
             ch = function1(s)
             if len(ch) != 0:
                 divise_blocks(ch)
+    elif s.find("de5el") != -1:
+        a = s.split('de5el')[0]
+        if len(a) != 0:
+            if a.find("de5el") != -1 or a.find("likol") != -1 or a.find("ma7ed") != -1:
+                divise_blocks(a)
+            else:
+                blocks.append(a)
+        blocks.append("de5el" + s.split('de5el')[1].split(');')[0] + ");")
+        ch = ");".join(s.split('de5el')[1].split(');')[1:])
+        if len(ch) != 0:
+            divise_blocks(ch)
     else :
         blocks.append(s)
 

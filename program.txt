@@ -1,3 +1,5 @@
-de5elra9m(a,"message : ");
-
-kteb(a + 2);
+likol(i = 0 fi 2)
+{f
+    de5elra9m(a,"3tini : ");
+    kteb(a);
+}f

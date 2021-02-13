@@ -349,6 +349,13 @@ for i in range(len(blocks)):
             if parser.parse(condition)[0] == 'ghalta':
                 break
             results_parsed.append(parser.parse(statements))
+    
+    elif 'de5el' in blocks[i]:
+        if len(results_display) != 0:
+            display_result(results_display,flatten(results_parsed))
+            results_display = []
+        results_parsed.append(parser.parse(blocks[i]))
+
     else:
         results_parsed.append(parser.parse(blocks[i]))
 
