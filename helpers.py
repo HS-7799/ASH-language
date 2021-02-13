@@ -43,15 +43,36 @@ def divise_blocks(s):
             ch = function1(s)
             if len(ch) != 0:
                 divise_blocks(ch)
-    elif s.find("de5el") != -1:
-        a = s.split('de5el')[0]
-        if len(a) != 0:
-            if a.find("de5el") != -1 or a.find("likol") != -1 or a.find("ma7ed") != -1:
-                divise_blocks(a)
+    elif s.find("de5el") != -1 and s.find('{') == -1 and s.find('}') == -1 :
+        a = s.split('de5el',1)
+        if len(a[0]) != 0:
+            if a[0].find("de5el") != -1 or a[0].find("likol") != -1 or a[0].find("ma7ed") != -1:
+                divise_blocks(a[0])
             else:
-                blocks.append(a)
-        blocks.append("de5el" + s.split('de5el')[1].split(');')[0] + ");")
-        ch = ");".join(s.split('de5el')[1].split(');')[1:])
+                blocks.append(a[0])
+        blocks.append("de5el" + a[1].split(');')[0] + ");")
+        ch = ");".join(a[1].split(');')[1:])
+        if len(ch) != 0:
+            divise_blocks(ch)
+    elif "{" in s and "}" in s:
+        a = s.split('ila',1)
+        if 'de5el' in a[0]:
+            divise_blocks(a[0])
+        else:
+            blocks.append(a[0])
+        
+        if 'ila' in s and 'awla' in s:
+            ila = 'ila'+a[1].split('}')[0] + '}'
+            awla = 'awla'+a[1].split('awla')[1].split('}')[0]+'}'
+            awlaila = a[1].split('}')[2:][0] + "}" 
+            if 'de5el' in awlaila or awlaila == "}":
+                blocks.append(ila + awla)
+            else:
+                blocks.append(ila + awla + awlaila)
+        elif 'ila' in s:
+            ila = 'ila'+a[1].split('}')[0] + '}'
+            blocks.append(ila)
+        ch = a[1].split('}')[len(a[1].split('}')) - 1]
         if len(ch) != 0:
             divise_blocks(ch)
     else :

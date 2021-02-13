@@ -1,5 +1,15 @@
+t = [1,2,3];
+
 likol(i = 0 fi 2)
 {f
-    de5elra9m(a,"3tini : ");
-    kteb(a);
+    ila(t[i] % 2 == 0)
+    {
+        de5elra9m(t[i],"3ti chi valeur machi divisible par 2 : ");
+    }
+}f
+
+
+likol(i = 0 fi 2)
+{f
+    kteb(t[i]);
 }f
