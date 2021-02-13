@@ -56,14 +56,16 @@ reserved = {
    # Return
    'reje3' : 'RETURN',
    # break / continue
-   '5roj' : 'BREAK',
-   'kmel' : 'CONTINUE',
+   '5roj' : 'BREAK', # pas encore
+   'kmel' : 'CONTINUE', # pas encore
    # output / input
    'kteb' : 'PRINT',
    'de5elra9m'  : 'INPUT_NUMBER',
    'de5el'  : 'INPUT',
+    #concatination
+    'jme3' : 'CONCAT',
    # define a function
-   'dala' : 'FUNCTION'
+   'dala' : 'FUNCTION' # pas encore
 }
 
 tokens += list(reserved.values())

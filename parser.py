@@ -134,6 +134,21 @@ def p_numbers(p):
         p[0] = p[1] + [p[3]]
 #end array
 
+def p_concat(p):
+    'concatination : CONCAT LPAREN EXPRESSIONS RPAREN'
+    a = ""
+    for i in range(len(p[3])):
+        a += (str(p[3][i]) + " ")
+    p[0] = a
+
+def p_expression_concat(p):
+    '''EXPRESSIONS : EXPRESSIONS COMMA expString 
+                   | expString'''
+    if len(p) == 2:
+        p[0] = [p[1]]
+    else:
+        p[0] = p[1] + [p[3]]
+
 #input
 def p_input(p):
     '''input : INPUT LPAREN var COMMA STRING RPAREN SEMICOL
@@ -183,11 +198,13 @@ def p_output(p):
 
 def p_expression_string_input(p):
     '''assignedValue : expString
+                     | concatination
                      | array'''
     p[0] = p[1]
 
 def p_expression_string(p):
     '''expString : expression
+                 | concatination
                  | STRING'''
     p[0] = p[1]
 
