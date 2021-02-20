@@ -43,7 +43,7 @@ def divise_blocks(s):
             ch = function1(s)
             if len(ch) != 0:
                 divise_blocks(ch)
-    elif s.find("de5el") != -1 and s.find('{') == -1 and s.find('}') == -1 :
+    # elif s.find("de5el") != -1 and s.find('{') == -1 and s.find('}') == -1 :
         a = s.split('de5el',1)
         if len(a[0]) != 0:
             if a[0].find("de5el") != -1 or a[0].find("likol") != -1 or a[0].find("ma7ed") != -1:
@@ -54,7 +54,8 @@ def divise_blocks(s):
         ch = ");".join(a[1].split(');')[1:])
         if len(ch) != 0:
             divise_blocks(ch)
-    elif "{" in s and "}" in s:
+    # this one
+    # elif "{" in s and "}" in s:
         a = s.split('ila',1)
         if 'de5el' in a[0]:
             divise_blocks(a[0])

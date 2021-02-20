@@ -349,6 +349,7 @@ file_contents = file_handle.read()
 blocks = parse_input(file_contents)
 
 for i in range(len(blocks)):
+    
     if 'likol' in blocks[i]:
         loop = for_loop(blocks[i])
         try:
