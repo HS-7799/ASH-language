@@ -78,10 +78,14 @@ def divise_blocks(s):
     else :
         blocks.append(s)
 
-
 def parse_input(s):
+    return_array = []
     divise_blocks(s.replace('\n',''))
-    return blocks
+    for i in range(len(blocks)):
+        if len(blocks[i]) > 0:
+            return_array.append(blocks[i])
+
+    return return_array
 
 def for_loop(s):
     loop = {}

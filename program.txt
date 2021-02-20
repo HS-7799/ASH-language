@@ -1,3 +1,0 @@
-de5elra9m(a,"donnez un nombre : ");
-
-kteb(jme3("vous avez entre ce nombre",a));

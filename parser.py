@@ -215,6 +215,9 @@ def p_expression(p):
                   | expression MINUS term
                   | expression OR expression
                   | expression AND expression'''
+
+    
+        
     if p[1] == 's7i7a':
         p[1] = 1
     elif p[1] == 'ghalta':
@@ -224,6 +227,10 @@ def p_expression(p):
         p[3] = 1
     elif p[3] == 'ghalta':
         p[3] = 0
+
+    if type(p[1]) is str or type(p[3]) is str:
+        print("you can't do operations on string")
+        exit()
 
     if p[2] == '+':
         p[0] = p[1] + p[3]
@@ -377,5 +384,3 @@ for i in range(len(blocks)):
         results_parsed.append(parser.parse(blocks[i]))
 
 display_result(results_display,flatten(results_parsed))
-
-print(identifiers)
