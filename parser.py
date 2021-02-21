@@ -229,7 +229,7 @@ def p_expression(p):
         p[3] = 0
 
     if type(p[1]) is str or type(p[3]) is str:
-        print("you can't do operations on string")
+        print("you can't do add string to numbers")
         exit()
 
     if p[2] == '+':
@@ -288,6 +288,10 @@ def p_term(p):
         p[3] = 1
     elif p[3] == 'ghalta':
         p[3] = 0
+
+    if type(p[1]) is str or type(p[3]) is str:
+        print("you can't divide or multiply string")
+        exit()
     
     if p[2] == '*':
         p[0] = p[1] * p[3]
@@ -348,6 +352,7 @@ file_contents = file_handle.read()
 
 blocks = parse_input(file_contents)
 
+
 for i in range(len(blocks)):
     
     if 'likol' in blocks[i]:
@@ -374,12 +379,12 @@ for i in range(len(blocks)):
             if parser.parse(condition)[0] == 'ghalta':
                 break
             results_parsed.append(parser.parse(statements))
-    
-    elif 'de5el' in blocks[i]:
-        if len(results_display) != 0:
-            display_result(results_display,flatten(results_parsed))
-            results_display = []
-        results_parsed.append(parser.parse(blocks[i]))
+    # elif 'de5el' in blocks[i]:
+        
+    #     if len(results_display) != 0:
+    #         display_result(results_display,flatten(results_parsed))
+    #         results_display = []
+    #     results_parsed.append(parser.parse(blocks[i]))
 
     else:
         results_parsed.append(parser.parse(blocks[i]))

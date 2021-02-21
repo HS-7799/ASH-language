@@ -1,1 +1,6 @@
-kteb("hello world");
+t = [50,8,15,5];
+
+likol(i = 0 fi 3)
+{f
+    kteb(t[i]);
+}f
