@@ -1,5 +1,5 @@
 ﻿## ASH-language
- ASH stands for Ayman, Saad and Hamza members of the team building this project.
+ ASH stands for Ayman, Saad and Hamza members of the team that built this project.
  
  This is a school project for the language theory and compilation module.
  
