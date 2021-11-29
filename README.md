@@ -16,9 +16,9 @@
  
  To test the lexer
  ```
- run python lexer.py program.txt 
+ python lexer.py program.txt 
  ```
  To test the parser
  ```
- run python parser.py program.txt 
+ python parser.py program.txt 
  ```
