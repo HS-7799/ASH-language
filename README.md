@@ -11,7 +11,14 @@
  
  ## run
  
- run the command git clone ... to clone this git repository or download the zip file.
+ First clone this git repository.
  create a file (for example program.txt) and write some code
- run python lexer.py program.txt to test the lexer
- run python parser.py program.txt to test the parser
+ 
+ To test the lexer
+ '''
+ run python lexer.py program.txt 
+ '''
+ To test the parser
+ '''
+ run python parser.py program.txt 
+ '''
