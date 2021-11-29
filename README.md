@@ -15,10 +15,10 @@
  create a file (for example program.txt) and write some code
  
  To test the lexer
- '''
+ ```
  run python lexer.py program.txt 
- '''
+ ```
  To test the parser
- '''
+ ```
  run python parser.py program.txt 
- '''
+ ```
